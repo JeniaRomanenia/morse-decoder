@@ -38,9 +38,42 @@ const MORSE_TABLE = {
 };
 
 function decode(expr) {
-    // write your solution here
+    
+    const code = {
+    ".":"10",
+    "-":"11"
+};
+
+let binary_table = {"**********": " "};
+
+convertTable();
+function decode(expr) {
+    let result = "";
+    for (let i = 0; i < expr.length; i += 10) {
+        let code = expr.substr(i, 10);
+        result += binary_table[code];
+    }
+
+    return result;
+
+}
+
+function convertTable() {
+    let cKey;
+    for (let key in MORSE_TABLE) {
+        cKey = "";
+        for (let char of key) {
+            cKey += code[char];
+        }
+        while (cKey.length < 10) {
+            cKey = "0" + cKey;
+        }
+        binary_table[cKey] = MORSE_TABLE[key];
+    }
 }
 
 module.exports = {
     decode
 }
+  
+
