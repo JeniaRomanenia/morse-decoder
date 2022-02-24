@@ -38,42 +38,39 @@ const MORSE_TABLE = {
 };
 
 function decode(expr) {
+    let letterArr = [];
+    let reverceMorse = {};
+    for (let name in MORSE_TABLE) {
+        reverceMorse[Object.values(MORSE_TABLE[name])] = name;
+    }
+    for(let letter in reverceMorse) {
+        let zeros = 10 - reverceMorse[letter].length *2 ;
+        let str = '0';
+        str = str.repeat(zeros);
+        reverceMorse[letter] = str + reverceMorse[letter].split('').map(item => {
+            return item == '.' ? item =  '10' : item =  '11';
+        }).join('');
+    }  
+    reverceMorse[' '] = '**********';
+    console.log(reverceMorse);
+    for(let i = 0; i < expr.length; i = i + 10){
+        letterArr.push(expr.slice(i, i+ 10));
+    }
+    let result = '';
     
-    const code = {
-    ".":"10",
-    "-":"11"
+        letterArr.map(item => {
+            for (let i in reverceMorse) {
+                if (reverceMorse[i] == item)  {
+                    result += i;
+                }
+            }
+        });
+        return result;
+    
+
+
 };
 
-let binary_table = {"**********": " "};
-
-convertTable();
-function decode(expr) {
-    let result = "";
-    for (let i = 0; i < expr.length; i += 10) {
-        let code = expr.substr(i, 10);
-        result += binary_table[code];
-    }
-
-    return result;
-
-}
-
-function convertTable() {
-    let cKey;
-    for (let key in MORSE_TABLE) {
-        cKey = "";
-        for (let char of key) {
-            cKey += code[char];
-        }
-        while (cKey.length < 10) {
-            cKey = "0" + cKey;
-        }
-        binary_table[cKey] = MORSE_TABLE[key];
-    }
-}
-
-module.exports = {
-    decode
-}
+module.exports = { decode };
   
 
